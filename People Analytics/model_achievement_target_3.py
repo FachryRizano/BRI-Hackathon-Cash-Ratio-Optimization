@@ -2,47 +2,40 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-df = pd.read_csv("test.csv")
-df['achievement_target_3'] = df['achievement_target_3'].replace('not_reached','not reached')
-print(sns.countplot(df['achievement_target_3']))
-plt.show()
-# merubah object menjadi category column
-obj_columns = df.select_dtypes(['object']).columns
-df[obj_columns] = df[obj_columns].astype('category')
-#merubah category menjadi int column
-cat_columns = df.select_dtypes(['category']).columns
-df[cat_columns] = df[cat_columns].apply(lambda x:x.cat.codes)
-
-X = df.drop('achievement_target_3',axis=1)
-y = df['achievement_target_3']
-
-
-
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.3)
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import MinMaxScaler
+from sklearn.metrics import classification_report,confusion_matrix,accuracy_score
+from normalize_data import normalize_data
 
-# error_rate = []
-# for i in range(1,40):
-#     knn = KNeighborsClassifier(n_neighbors=i)
-#     knn.fit(X_train,y_train)
-#     pred_i = knn.predict(X_test)
-#     error_rate.append(np.mean(pred_i!=y_test))
+df_test = pd.read_csv("test.csv")
+df = pd.read_csv("train.csv")
 
-# plt.figure(figsize=(10,6))
-# plt.plot(range(1,40),error_rate,color='blue',linestyle='dashed',marker='o',markerfacecolor='red',markersize=10)
-# plt.title('Error Rate vs K Value')
-# plt.xlabel('K')
-# plt.ylabel('Error Rate')
-# plt.show()
+df_test = normalize_data(df_test,False)
 
-knn = KNeighborsClassifier(n_neighbors=27)
-knn.fit(X_train,y_train)
-pred = knn.predict(X_test)
+X = df_test.drop('achievement_target_3',axis=1)
+y = df_test['achievement_target_3']
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.3, random_state=0)
+scaler = MinMaxScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-from sklearn.metrics import roc_auc_score,confusion_matrix,classification_report
+model = RandomForestClassifier(n_estimators=200)
+# model = DecisionTreeClassifier()
+model.fit(X_train,y_train)
+# pred = model.predict(X_test)
+# print(accuracy_score(y_test,pred))
+# print(classification_report(y_test,pred))
+# print(confusion_matrix(y_test,pred))
 
-print(roc_auc_score(pred,y_test))
-print(confusion_matrix(pred,y_test))
-print(classification_report(pred,y_test))
-
+df = normalize_data(df,False)
+# print(df['achievement_target_3'])
+for i in enumerate(df):
+    
+print(df.drop('achievement_target_3',axis=1).loc[i])
+# df['achievement_target_3'].fillna(model.predict()
+# print(df['achievement_target_3'])
+# print(df.head())
+# print(df.info())

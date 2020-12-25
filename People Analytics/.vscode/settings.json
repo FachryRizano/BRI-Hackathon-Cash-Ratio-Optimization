@@ -1,4 +1,5 @@
 {
     "workbench.colorTheme": "Noctis Minimus",
-    "workbench.iconTheme": "vscode-icons"
+    "workbench.iconTheme": "vscode-icons",
+    "python.pythonPath": "venv\\Scripts\\python.exe"
 }
