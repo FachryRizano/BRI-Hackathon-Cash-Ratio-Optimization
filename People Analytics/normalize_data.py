@@ -15,7 +15,7 @@ def normalize_data(df):
     #GPA diisi dengan mean dari column GPA
     #Avg achievement % diisi dengan rata2 
     #Last achievement % diisi dengan rata2
-    df = df.drop(['number_of_dependences (male)','number_of_dependences (female)','year_graduated'],axis=1)
+    df = df.drop(['number_of_dependences (male)','number_of_dependences (female)','year_graduated','Employee_status'],axis=1)
     # df['year_graduated']=df['year_graduated'].replace('.','2013') #most frequent
     # df['year_graduated']=df['year_graduated'].replace('0','2013') #most frequent
     # df['year_graduated']=df['year_graduated'].replace('1016','2016') #mungkin 2016
@@ -28,7 +28,19 @@ def normalize_data(df):
     # df['year_graduated']=df['year_graduated'].replace('3013','2013') #mungkin 2013
     # df['year_graduated']=df['year_graduated'].replace('9999','1999') #mungkin 1999
     # df['year_graduated']=df['year_graduated'].replace('\\N','2013') #most frequent
-
+    # df = df[
+    #     (df.year_graduated != ".") & 
+    #     (df.year_graduated != "0") & 
+    #     (df.year_graduated != "1016") & 
+    #     (df.year_graduated !="207") &
+    #     (df.year_graduated !="209") &
+    #     (df.year_graduated !="2201") &
+    #     (df.year_graduated !="2999") &
+    #     (df.year_graduated !="3.05") &
+    #     (df.year_graduated !="3.18") &
+    #     (df.year_graduated !="3013") &
+    #     (df.year_graduated !="9999") &
+    #     (df.year_graduated !="\\N")]
     # df = df.drop(['number_of_dependences (male)','number_of_dependences (female)'],axis=1)
     
     df['Achievement_above_100%_during3quartal'] = df['Achievement_above_100%_during3quartal'].fillna(df['Achievement_above_100%_during3quartal'].mean())
@@ -49,9 +61,10 @@ def normalize_data(df):
     df['achievement_target_1'] = df['achievement_target_1'].replace("Pencapaian 50%-100%",'achiev_50%-100%')
     df['achievement_target_1'] = df['achievement_target_1'].replace("Pencapaian 100%-150%",'achiev_100%-150%')
     df['achievement_target_1'] = df['achievement_target_1'].replace("Pencapaian > 1.5",'achiev_> 1.5')
-
+    # df = df[df['Employee_status']!= "Contract"]
     df['achievement_target_1'] = df['achievement_target_1'].fillna(df['achievement_target_1'].mode().iloc[0])
     df['achievement_target_2'] = df['achievement_target_2'].fillna(df['achievement_target_2'].mode().iloc[0])
     df['achievement_target_3'] = df['achievement_target_3'].fillna(df['achievement_target_3'].mode().iloc[0])
+    df = df[df['achievement_target_3'] != "NONE"]
     # df['year_graduated'] = df['year_graduated'].fillna(df['year_graduated'].mode().iloc[0])
     return df
