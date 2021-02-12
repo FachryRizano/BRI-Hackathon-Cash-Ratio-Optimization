@@ -1,0 +1,6 @@
+- Apakah sudah benar cara ngeimpute date yang missing ?
+- pake model apa bagusnya ?
+- null hypothesis 
+- Cek data di antara bulan Agustus 2020 - September 2020
+https://www.youtube.com/watch?v=2XGSIlgUBDI&t=493s
+https://medium.com/@drnesr/filling-gaps-of-a-time-series-using-python-d4bfddd8c460
